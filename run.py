@@ -14,13 +14,19 @@ sudo_mode = "sudo "
 
 
 def wifi_connect(ssid, psk):
-    # write wifi config to file
+
+    # remove old config
+    cmd = sudo_mode + "sed -i '4,$d' " + wpa_supplicant_conf
+    cmd_result = ""
+    cmd_result = os.system(cmd)
+    print cmd + " - " + str(cmd_result)
+
+    # write new wifi config to file
     cmd = 'wpa_passphrase {ssid} {psk} | sudo tee -a {conf} > /dev/null'.format(
             ssid=str(ssid).replace('!', '\!'),
             psk=str(psk).replace('!', '\!'),
             conf=wpa_supplicant_conf
         )
-    cmd_result = ""
     cmd_result = os.system(cmd)
     print cmd + " - " + str(cmd_result)
 
